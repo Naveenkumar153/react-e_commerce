@@ -1,13 +1,16 @@
 import { ArrowLeftOutlined,ArrowRightOutlined } from "@material-ui/icons";
+import { useState } from "react";
 import { styled } from "styled-components";
-
+import { sliderItems } from "../data";
 
 const Container = styled.div`
     width: 100%;
     height: 100vh;
     display: flex;
-    background-color: coral;
+    background-color: #f3f3f3;
+    /* background-color: coral; */
     position: relative;
+    overflow: hidden;
 `;
 
 const Arrow = styled.div`
@@ -25,10 +28,14 @@ const Arrow = styled.div`
     left:${props => props.direction == 'left' && '10px'};
     right:${props => props.direction == 'right' && '10px'};
     opacity: .5;
+    z-index: 2;
 `;
 
 const Wrapper = styled.div`
     height: 100%;
+    display: flex;
+    transition: all .6s ease;
+    transform: translateX(${(props) => props.slideIdx * -100}vw);
 `;
 
 const Slide  = styled.div`
@@ -36,6 +43,7 @@ const Slide  = styled.div`
     height: 100vh;
     display: flex;
     align-items: center;
+    background-color: #${props => props.bg };
 `;
 const ImgContainer  = styled.div`
     height: 100%;
@@ -50,30 +58,61 @@ const InfoContainer  = styled.div`
     padding: 50px;
 `;
 const Title = styled.h1`
-
+font-size: 70px;
+text-transform: uppercase;
 `;
 const Para  = styled.p`
-
-`;
+    margin: 50px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 3px ;
+    text-transform: uppercase;
+    `;
 const Btn   = styled.button`
-
+    padding: 10px;
+    font-size: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    text-transform: uppercase;
 `;
 
 export default function Slider() {
+
+  const [slideIdx, setSlideIdx] = useState(0);
+
+  const handleClick = (direction) => {
+    console.log('handle click', direction);
+    if(direction == 'left'){
+        setSlideIdx(slideIdx > 0 ? slideIdx - 1 : 2);
+    }else{
+        setSlideIdx(slideIdx < 2 ? slideIdx + 1 : 0);
+    }
+  };
+
   return (
     <Container>
-        <Arrow direction='left'>
+        <Arrow direction='left' onClick={ () => handleClick('left') }>
             <ArrowLeftOutlined/>
         </Arrow>
-        <Wrapper>
-            <Slide>
-                <ImgContainer>
-                    <Image src='https://i.ibb.co/DG69bQ4/2.png' />
-                </ImgContainer>
-                <InfoContainer></InfoContainer>
-            </Slide>
+        <Wrapper slideIdx={slideIdx}>
+            {
+                sliderItems.map(item => {
+                    return (
+                        <Slide bg={item.bg}>
+                            <ImgContainer>
+                                <Image src={item.img} />
+                            </ImgContainer>
+                            <InfoContainer>
+                                <Title>{item.title}</Title>
+                                <Para>{item.desc}</Para>
+                                <Btn>show now</Btn>
+                            </InfoContainer>
+                        </Slide>
+                    );
+                })
+            }
         </Wrapper>
-        <Arrow direction='right'>
+        <Arrow direction='right' onClick={ () => handleClick('right') }>
             <ArrowRightOutlined/>
         </Arrow>
     </Container>
