@@ -5,7 +5,7 @@ import Announcement from '../Components/Announcement';
 import NewsLetter from '../Components/NewsLetter';
 import Footer from '../Components/Footer';
 import { Add, Remove, } from '@material-ui/icons';
-import { mobile } from '../responsive';
+import { mobile,tablet } from '../responsive';
 
 
 const Container = styled.div`
@@ -14,7 +14,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
     padding: 50px;
     display: flex;
-    ${mobile(
+    ${tablet(
         {
           padding:'10px',
           flexDirection:'column'

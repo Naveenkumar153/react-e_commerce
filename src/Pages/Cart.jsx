@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Announcement from "../Components/Announcement";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-import { mobile } from "../responsive";
+import { mobile,tablet } from "../responsive";
 
 const Container = styled.div``;
 
@@ -46,7 +46,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
+  ${tablet({ flexDirection: "column" })}
 
 `;
 
