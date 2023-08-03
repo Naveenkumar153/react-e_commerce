@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import Navbar from '../Components/Navbar';
 import Announcement from '../Components/Announcement';
@@ -6,7 +6,8 @@ import NewsLetter from '../Components/NewsLetter';
 import Footer from '../Components/Footer';
 import { Add, Remove, } from '@material-ui/icons';
 import { mobile,tablet } from '../responsive';
-
+import { Link, useParams } from 'react-router-dom';
+import axiosHttp from '../services/interceptor';
 
 const Container = styled.div`
 
@@ -28,14 +29,21 @@ const ImgContainer = styled.div`
    
 `;
 const Image = styled.img`
-    width: 100%;
-    height: 90vh;
-    object-fit: cover;
+    transform: scale(.8);
+    width: 70%;
+    height: 50vh;
+    object-fit: contain;
+    transition: all .6s ease;
     ${mobile(
         {
             height:'40vh',
         }
     )};
+
+    &:hover{
+        cursor: pointer;
+        transform: translate(20%, 0%) scale(1.3);
+    }
 `;
 const InfoContainer = styled.div`
     flex: 1;
@@ -136,22 +144,48 @@ const Button = styled.button`
         }
 `;
 
+const BackBtn = styled.span`
+    position: relative;
+    top: 20px;
+    left: 1.3%;
+`;
+
 
 export default function Product() {
+  let params = useParams();
+  const [ productDetails, setProductDetails ] = useState([]);
+
+  console.log('params',+params.id);
+
+  const getProductDetails = () => {
+        axiosHttp.get(`/products/${+params.id}`).then(res => {
+            console.log('res',res);
+            if(res.status === 200){
+                setProductDetails(res.data)
+            }
+        })
+        .catch(error => {
+            console.log('error',error)
+        });
+  };
+  
+  useEffect(() => {
+    getProductDetails()
+  },[])
+
   return (
     <Container>
         <Navbar/>
         <Announcement/>
+          <BackBtn> <Link to={'/products'} className='removeUnderLine'>Go to Products</Link></BackBtn>
             <Wrapper>
                 <ImgContainer>
-                    <Image src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
+                    <Image src={productDetails.image}/>
                 </ImgContainer>
                 <InfoContainer>
-                    <Title>Denium Jumsuit</Title>
-                    <Description>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur ab sequi accusamus, eaque ex sed? Totam accusamus quasi optio corporis molestias labore, provident eaque esse? Repellat quod perspiciatis dolor ullam.
-                    </Description>
-                    <Price>$20</Price>
+                    <Title>{productDetails.title}</Title>
+                    <Description>{ productDetails.description }</Description>
+                    <Price>${ productDetails.price }</Price>
                     {/* <FilterContainer>
                          <Filter>
                             <FilterTitle>Color</FilterTitle>
@@ -172,11 +206,11 @@ export default function Product() {
                          </Filter>
                     </FilterContainer> */}
                     <AddContainer>
-                        <AmountContainer>
+                        {/* <AmountContainer>
                             <Remove/>
                             <Amount>1</Amount>
                             <Add/>
-                        </AmountContainer>
+                        </AmountContainer> */}
                         <Button>Add To Cart</Button>
                     </AddContainer>
                 </InfoContainer>

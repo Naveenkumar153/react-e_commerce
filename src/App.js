@@ -7,6 +7,7 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';
 import Cart from './Pages/Cart';
 import RoutePath from './routes/router';
+
 function App() {
   return (
     <div className="App">

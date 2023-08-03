@@ -4,6 +4,7 @@ import Announcement from "../Components/Announcement";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { mobile,tablet } from "../responsive";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
 
@@ -154,6 +155,11 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+
+  const navigate = useNavigate();
+
+  const goToProducts = () => { navigate('/products') };
+
   return (
     <Container>
       <Navbar />
@@ -161,7 +167,7 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton onClick={goToProducts}>CONTINUE SHOPPING</TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>

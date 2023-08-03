@@ -63,9 +63,9 @@ export default function ProductList() {
     <Container>
         <Announcement/>
         <Navbar/>
-        <Title>Dresses</Title>
+        <Title>Our Products</Title>
         <FilterContainer>
-            <Filter>
+            {/* <Filter>
                 <FilterText> Filter Products:
                 
                 <Select>
@@ -79,8 +79,8 @@ export default function ProductList() {
                     <Option>Yellow</Option>
                 </Select>
                  </FilterText>
-            </Filter>
-            <Filter>
+            </Filter> */}
+            {/* <Filter>
                 <FilterText> Sort Products: 
                     <Select>
                         <Option disabled selected>
@@ -90,7 +90,7 @@ export default function ProductList() {
                         <Option>Price (high to low)</Option>
                     </Select>
                 </FilterText>
-            </Filter>
+            </Filter> */}
         </FilterContainer>
         <Products/>
         <NewsLetter/>

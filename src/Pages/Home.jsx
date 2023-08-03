@@ -13,7 +13,7 @@ export default function Home() {
         <Navbar/>
         <Slider/>
         <Categories/>
-        <Products/>
+        {/* <Products/> */}
         <NewsLetter/>
         <Footer/>
     </div>

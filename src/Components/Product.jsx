@@ -35,14 +35,14 @@ const Container  = styled.div`
 `;
 
 const Circle  = styled.div`
-    width: 200px;
-    height: 200px;
+    width: 290px;
+    height: 290px;
     border-radius: 50%;
     background-color: #fff;
     position: absolute;
 `;
 const Image  = styled.img`
-    height: 75%;
+    height: 40%;
     z-index: 2;
 `;
 
@@ -62,28 +62,26 @@ const Icon  = styled.div`
         }
 `;
 export default function Product(props) {
-
     const navigate = useNavigate();
 
     const viewProductDetail = (id) => {
-        // console.log(id)
         navigate('/product/'+id);
     };
 
   return (
     <Container onClick={ () => viewProductDetail(props.products.id) }>
         <Circle />
-        <Image src={props.products.img}/>
+        <Image src={props.products.image}/>
         <Info>
             <Icon>
                 <ShoppingCartOutlined/>
             </Icon>
-            <Icon>
+            {/* <Icon>
                 <SearchOutlined/>
             </Icon>
             <Icon>
                 <FavoriteBorderOutlined/>
-            </Icon>
+            </Icon> */}
         </Info>
     </Container>
   )

@@ -3,7 +3,7 @@ import { Search,LocalMallOutlined } from '@material-ui/icons';
 import React from 'react'
 import { styled } from 'styled-components';
 import { mobile } from '../responsive';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -103,6 +103,11 @@ const Right  = styled.div`
 
 
 export default function Navbar() {
+
+  const navigate  = useNavigate();
+
+  const goToCart = () => { navigate('/cart') }
+
   return (
     <Container>
       <Wrapper>
@@ -118,7 +123,7 @@ export default function Navbar() {
           <Right>
             <MenuItems><Link to={'/signin'} className='removeUnderLine'>SIGN IN</Link></MenuItems>
             <MenuItems><Link to={'/signup'} className='removeUnderLine'>SIGN UP</Link></MenuItems>
-            <MenuItems to={'/cart'}>
+            <MenuItems onClick={goToCart}>
               <Badge badgeContent={4} color='primary'>
                 <LocalMallOutlined/>
               </Badge>
