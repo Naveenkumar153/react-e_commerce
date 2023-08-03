@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components';
 import { mobile } from '../responsive';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
 flex: 1;
@@ -40,14 +41,20 @@ padding: 10px;
 background: #fff;
 color: gray;
 font-weight: 700;
+cursor: pointer;
 `;
 export default function CategoriesItem(props) {
+
+  const navigate = useNavigate();
+
+  const shopNow = () => { navigate('/products')  }
+
   return (
     <Container>
         <Image src={props.items.img}/>
         <Info>
             <Title>{ props.items.title }</Title>
-            <Button>SHOP Now</Button>
+            <Button onClick={ shopNow }>SHOP Now</Button>
         </Info>
     </Container>
   )

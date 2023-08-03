@@ -3,6 +3,8 @@ import { Search,LocalMallOutlined } from '@material-ui/icons';
 import React from 'react'
 import { styled } from 'styled-components';
 import { mobile } from '../responsive';
+import { Link } from 'react-router-dom';
+
 
 const Container = styled.div`
       height:60px;
@@ -111,11 +113,12 @@ export default function Navbar() {
                <Search style={{ color:'grey',fontSize:16 }}/>
             </SearchContainer>
           </Left> */}
-          <Center><Logo>My <span>store</span></Logo></Center>
+          <Center><Logo>
+            <Link to={'/'} className='removeUnderLine'>My <span>store</span></Link></Logo></Center>
           <Right>
-            <MenuItems>SIGN IN</MenuItems>
-            <MenuItems>SIGN UP</MenuItems>
-            <MenuItems>
+            <MenuItems><Link to={'/signin'} className='removeUnderLine'>SIGN IN</Link></MenuItems>
+            <MenuItems><Link to={'/signup'} className='removeUnderLine'>SIGN UP</Link></MenuItems>
+            <MenuItems to={'/cart'}>
               <Badge badgeContent={4} color='primary'>
                 <LocalMallOutlined/>
               </Badge>

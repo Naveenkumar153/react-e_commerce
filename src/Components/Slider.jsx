@@ -3,6 +3,7 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { sliderItems } from "../data";
 import { mobile, tablet, } from "../responsive";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -84,6 +85,10 @@ const Btn   = styled.button`
 
 export default function Slider() {
 
+  const navigate =  useNavigate();
+
+  const showUpNow = () => { navigate('/products') };
+
   const [slideIdx, setSlideIdx] = useState(0);
 
   const handleClick = (direction) => {
@@ -111,7 +116,7 @@ export default function Slider() {
                             <InfoContainer>
                                 <Title>{item.title}</Title>
                                 <Para>{item.desc}</Para>
-                                <Btn>show now</Btn>
+                                <Btn onClick={ showUpNow }>show now</Btn>
                             </InfoContainer>
                         </Slide>
                     );

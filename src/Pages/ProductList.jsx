@@ -6,6 +6,7 @@ import Products from '../Components/Products';
 import NewsLetter from '../Components/NewsLetter';
 import Footer from '../Components/Footer';
 import { mobile } from '../responsive';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
 `;
@@ -51,10 +52,17 @@ const Select = styled.select`
 const Option = styled.option``;
 
 export default function ProductList() {
+
+  const navigate = useNavigate();
+
+  const viewProductDetail = (id) => {
+
+  };
+
   return (
     <Container>
-        <Navbar/>
         <Announcement/>
+        <Navbar/>
         <Title>Dresses</Title>
         <FilterContainer>
             <Filter>

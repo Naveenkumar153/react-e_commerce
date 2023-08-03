@@ -1,6 +1,7 @@
 import { ShoppingCartOutlined, SearchOutlined, FavoriteBorderOutlined } from '@material-ui/icons';
 import React from 'react'
 import { styled } from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const Info  = styled.div`
     opacity: 0;
@@ -61,8 +62,16 @@ const Icon  = styled.div`
         }
 `;
 export default function Product(props) {
+
+    const navigate = useNavigate();
+
+    const viewProductDetail = (id) => {
+        // console.log(id)
+        navigate('/product/'+id);
+    };
+
   return (
-    <Container>
+    <Container onClick={ () => viewProductDetail(props.products.id) }>
         <Circle />
         <Image src={props.products.img}/>
         <Info>
