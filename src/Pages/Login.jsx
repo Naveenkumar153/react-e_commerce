@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import { mobile, tablet } from "../responsive";
+import { signupValidationSchema } from '../validators/signinschema';
+import { Alert,Snackbar } from '@mui/material';
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -54,7 +58,7 @@ const Button = styled.button`
   margin-bottom: 10px;
 `;
 
-const Link = styled.a`
+const Navigate = styled.a`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -62,17 +66,61 @@ const Link = styled.a`
 `;
 
 const Login = () => {
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [formSubmit, setFormSubmit] = useState(false);
+
+  const handleCloseSnackbar = (event, reason) => {
+    console.log('event',event);
+    console.log('reason',reason);
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowSnackbar(false);
+    setFormSubmit(false);
+  };
+
+
+  const submitForm = async (event) => {
+    event.preventDefault();
+    let formData = {
+      email: event.target[0].value,
+      password:event.target[1].value,
+    }
+    const isValid = await signupValidationSchema.isValid(formData);
+    if(isValid){
+         console.log('form valid',formData);
+         setFormSubmit(true);
+    }else{
+         console.log('form not valid')
+         setShowSnackbar(true)
+     }
+  }
+
+
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
-        <Form>
-          <Input placeholder="username" />
-          <Input placeholder="password" />
+        <Form onSubmit={ submitForm }>
+          <Input type="email" placeholder="email" />
+          <Input type='password' placeholder="password" minLength={4} maxLength={16}/>
           <Button>LOGIN</Button>
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
+          <Navigate>DO NOT YOU REMEMBER THE PASSWORD?</Navigate>
+          <Navigate><Link to={'/signup'}>CREATE A NEW ACCOUNT</Link></Navigate>
         </Form>
+        {/* Snackbar to show success message */}
+        <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+              <Alert onClose={handleCloseSnackbar} severity="error">
+                 <p> Email is required </p>
+                 <p> Password must 4 characters max 16 characters is required </p>
+              </Alert>
+            </Snackbar>
+            <Snackbar open={formSubmit} autoHideDuration={1000} onClose={handleCloseSnackbar}>
+              <Alert onClose={handleCloseSnackbar} severity="success">
+                successfully login
+              </Alert>
+            </Snackbar>
       </Wrapper>
     </Container>
   );

@@ -5,10 +5,11 @@ import Spinner from './spinner/spinner';
 
 const LoaderWrapper = styled('div')({
     position: 'fixed',
-    top: 0,
-    left: 0,
+    top: '50%',
+    left: '50%',
     zIndex: 100,
-    width: '100%'
+    width: '100%',
+    backgroundColor:'#0000'
 });
 
 function loader() {
