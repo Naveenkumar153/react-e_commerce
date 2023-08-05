@@ -8,6 +8,8 @@ import { Add, Remove, } from '@material-ui/icons';
 import { mobile,tablet } from '../responsive';
 import { Link, useParams } from 'react-router-dom';
 import axiosHttp from '../services/interceptor';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../redux/cartReducer';
 
 const Container = styled.div`
 
@@ -154,6 +156,7 @@ const BackBtn = styled.span`
 export default function Product() {
   let params = useParams();
   const [ productDetails, setProductDetails ] = useState([]);
+  const dispatch  = useDispatch(); 
 
   console.log('params',+params.id);
 
@@ -211,7 +214,7 @@ export default function Product() {
                             <Amount>1</Amount>
                             <Add/>
                         </AmountContainer> */}
-                        <Button>Add To Cart</Button>
+                        <Button onClick={ () => dispatch(addToCart(productDetails)) }>Add To Cart</Button>
                     </AddContainer>
                 </InfoContainer>
             </Wrapper>

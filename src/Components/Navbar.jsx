@@ -4,6 +4,7 @@ import React from 'react'
 import { styled } from 'styled-components';
 import { mobile } from '../responsive';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 const Container = styled.div`
@@ -105,6 +106,7 @@ const Right  = styled.div`
 export default function Navbar() {
 
   const navigate  = useNavigate();
+  const products  = useSelector((state) => state.cart.products);
 
   const goToCart = () => { navigate('/cart') }
 
@@ -124,7 +126,7 @@ export default function Navbar() {
             <MenuItems><Link to={'/signin'} className='removeUnderLine'>SIGN IN</Link></MenuItems>
             <MenuItems><Link to={'/signup'} className='removeUnderLine'>SIGN UP</Link></MenuItems>
             <MenuItems onClick={goToCart}>
-              <Badge badgeContent={4} color='primary'>
+              <Badge badgeContent={products.length} color='primary'>
                 <LocalMallOutlined/>
               </Badge>
             </MenuItems>
