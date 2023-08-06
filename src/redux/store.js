@@ -1,11 +1,6 @@
-// import { configureStore } from '@reduxjs/toolkit'
-import cartReducer from './cartReducer'
-
-// export const store =  configureStore ({
-    //   reducer: { cart:cartReducer }
-    // })
-    
-import { configureStore } from '@reduxjs/toolkit'
+import { applyMiddleware, configureStore } from '@reduxjs/toolkit'
+import cartReducer from './cartReducer';
+import authReducer from './authReducer';
 import {
   persistStore,
   persistReducer,
@@ -16,7 +11,9 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
+import thunk from 'redux-thunk';
+
 
 const persistConfig = {
   key: 'root',
@@ -24,15 +21,18 @@ const persistConfig = {
   storage,
 }
 
-const persistedReducer = persistReducer(persistConfig, cartReducer)
+const persistedReducer = persistReducer(persistConfig, cartReducer);
+const persistedAuthReducer = persistReducer(persistConfig, authReducer); // Persist the authReducer
+
 
 export const store = configureStore({
-  reducer: { cart: persistedReducer},
+  reducer: { cart: persistedReducer , auth:persistedAuthReducer },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
+      thunk:true,
     }),
 })
 

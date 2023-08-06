@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { mobile , tablet} from '../responsive';
 import { signInValidationSchema } from '../validators/signinschema';
 import { Alert,Snackbar } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { signIn } from '../redux/authReducer';
 
 const Container  = styled.div`
     width: 100vw;
@@ -77,6 +78,8 @@ export default function Register() {
   // const [formErrors, setFormErrors] = useState({});
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
 
   const handleCloseSnackbar = (event, reason) => {
     console.log('event',event);
@@ -97,30 +100,17 @@ export default function Register() {
       password:event.target[2].value,
     }
 
-   const isValid = await signInValidationSchema.isValid(formData,);
+   const isValid = await signInValidationSchema.isValid(formData);
 
    if(isValid){
         console.log('form valid',formData);
         setFormSubmit(true);
+        dispatch(signIn(formData));
+        console.log('users',user);
    }else{
         console.log('form not valid')
         setShowSnackbar(true)
-    }
-
-
-    // try {
-    //   console.log('formData',formData);
-    //   await validationSchema.isValid(formData,{ abortEarly:false });
-    //   // console.log('isValid',isValid)
-    //   console.log('Form is valid. Submitting...');
-    // } catch (error) {
-    //   const errors = {};
-    //   error.inner.forEach((err) => {
-    //     errors[err.path] = err.message;
-    //   });
-    //   setFormErrors(errors);
-    //   console.log('formErrors',formErrors)
-    // }
+    };
   };
 
   return (

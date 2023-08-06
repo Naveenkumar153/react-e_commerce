@@ -218,7 +218,7 @@ const Cart = () => {
           <Top >
             <TopButton onClick={goToProducts}>CONTINUE SHOPPING</TopButton>
             <TopTexts>
-              <TopText>Shopping Bag(2)</TopText>
+              <TopText>Shopping Bag({ products.length })</TopText>
               {/* <TopText>Your Wishlist (0)</TopText> */}
             </TopTexts>
             <TopButton type="filled">CHECKOUT NOW</TopButton>

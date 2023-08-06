@@ -3,8 +3,9 @@ import { mobile, tablet } from "../responsive";
 import { signupValidationSchema } from '../validators/signinschema';
 import { Alert,Snackbar } from '@mui/material';
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signUp,selectIsLoggedIn } from "../redux/authReducer";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -69,6 +70,9 @@ const Login = () => {
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.auth.user);
+  const navigate = useNavigate();
 
   const handleCloseSnackbar = (event, reason) => {
     console.log('event',event);
@@ -80,6 +84,7 @@ const Login = () => {
     setFormSubmit(false);
   };
 
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -89,13 +94,18 @@ const Login = () => {
     }
     const isValid = await signupValidationSchema.isValid(formData);
     if(isValid){
-         console.log('form valid',formData);
-         setFormSubmit(true);
+        //  console.log('form valid',formData);
+        //  console.log('form useSelector',users);
+         dispatch(signUp(formData));
+         setFormSubmit(isLoggedIn);
+        //  const loginState = { isLoggedIn:  isLoggedIn}
+         navigate('/');
     }else{
          console.log('form not valid')
          setShowSnackbar(true)
      }
   }
+
 
 
   return (
@@ -110,7 +120,7 @@ const Login = () => {
           <Navigate><Link to={'/signup'}>CREATE A NEW ACCOUNT</Link></Navigate>
         </Form>
         {/* Snackbar to show success message */}
-        <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
               <Alert onClose={handleCloseSnackbar} severity="error">
                  <p> Email is required </p>
                  <p> Password must 4 characters max 16 characters is required </p>

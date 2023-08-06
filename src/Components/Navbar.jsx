@@ -3,8 +3,10 @@ import { Search,LocalMallOutlined } from '@material-ui/icons';
 import React from 'react'
 import { styled } from 'styled-components';
 import { mobile } from '../responsive';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from '../redux/authReducer';
+import { resetCart } from '../redux/cartReducer';
 
 
 const Container = styled.div`
@@ -104,11 +106,18 @@ const Right  = styled.div`
 
 
 export default function Navbar() {
-
+  const dispatch  = useDispatch();
   const navigate  = useNavigate();
   const products  = useSelector((state) => state.cart.products);
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  // const isLoggedIn = location.state;
   const goToCart = () => { navigate('/cart') }
+
+  const goToSignUp = () => {
+    // dispatch(resetCart)
+    dispatch(signOut);
+    navigate('/signin');
+  };
 
   return (
     <Container>
@@ -123,8 +132,14 @@ export default function Navbar() {
           <Center><Logo>
             <Link to={'/'} className='removeUnderLine'>My <span>store</span></Link></Logo></Center>
           <Right>
-            <MenuItems><Link to={'/signin'} className='removeUnderLine'>SIGN IN</Link></MenuItems>
-            <MenuItems><Link to={'/signup'} className='removeUnderLine'>SIGN UP</Link></MenuItems>
+            {
+              isLoggedIn ? <MenuItems><span onClick={ goToSignUp }>LOGOUT</span></MenuItems> :
+              <>
+                <MenuItems><Link to={'/signin'} className='removeUnderLine'>SIGN IN</Link></MenuItems>
+                <MenuItems><Link to={'/signup'} className='removeUnderLine'>SIGN UP</Link></MenuItems>
+              </>
+            }
+            
             <MenuItems onClick={goToCart}>
               <Badge badgeContent={products.length} color='primary'>
                 <LocalMallOutlined/>
