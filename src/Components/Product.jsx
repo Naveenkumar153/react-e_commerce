@@ -2,6 +2,8 @@ import { ShoppingCartOutlined, SearchOutlined, FavoriteBorderOutlined } from '@m
 import React from 'react'
 import { styled } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../redux/cartReducer';
 
 const Info  = styled.div`
     opacity: 0;
@@ -63,7 +65,7 @@ const Icon  = styled.div`
 `;
 export default function Product(props) {
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const viewProductDetail = (id) => {
         navigate('/product/'+id);
     };
@@ -74,7 +76,7 @@ export default function Product(props) {
         <Image src={props.products.image}/>
         <Info>
             <Icon>
-                <ShoppingCartOutlined/>
+                <ShoppingCartOutlined onClick={ (e) => {e.stopPropagation(); dispatch(addToCart(props.products))} }/>
             </Icon>
             {/* <Icon>
                 <SearchOutlined/>
