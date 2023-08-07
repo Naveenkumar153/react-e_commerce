@@ -3,9 +3,9 @@ import { styled } from 'styled-components'
 import { mobile , tablet} from '../responsive';
 import { signInValidationSchema } from '../validators/signinschema';
 import { Alert,Snackbar } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { signIn } from '../redux/authReducer';
+import { signIn,removeAllUsers } from '../redux/authReducer';
 
 const Container  = styled.div`
     width: 100vw;
@@ -74,12 +74,19 @@ const HaveAccount = styled.a`
     font-weight: 100;
     margin: -10px 0 10px 0;
 `;
+
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 export default function Register() {
   // const [formErrors, setFormErrors] = useState({});
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
   const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleCloseSnackbar = (event, reason) => {
     console.log('event',event);
@@ -100,17 +107,24 @@ export default function Register() {
       password:event.target[2].value,
     }
 
-   const isValid = await signInValidationSchema.isValid(formData);
-
+   let isValid = await signInValidationSchema.isValid(formData);
+   console.log('form valid',isValid);
    if(isValid){
-        console.log('form valid',formData);
         setFormSubmit(true);
         dispatch(signIn(formData));
         console.log('users',user);
+        setTimeout(() => navigate('/signin'),1000);
+        isValid = false;
    }else{
         console.log('form not valid')
-        setShowSnackbar(true)
+        setShowSnackbar(true);
+        setFormSubmit(false);
     };
+  };
+
+  const remove = () => {
+      dispatch(removeAllUsers())
+     console.log(user);
   };
 
   return (
@@ -129,7 +143,10 @@ export default function Register() {
                     accordance with the <b>PRIVACY POLICY</b>
                 </Agreement>
                 <HaveAccount>Already have account please <Link to={'/signin'}>Signin</Link></HaveAccount>
-                <Button>CREATE</Button>
+                <Flex >
+                  <Button>CREATE</Button>
+                  <Link onClick={ remove }>Reset All users</Link>
+                </Flex>
             </Form>
             {/* Snackbar to show success message */}
             <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>

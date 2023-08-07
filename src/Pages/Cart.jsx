@@ -7,7 +7,8 @@ import { mobile,tablet } from "../responsive";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { removeItem } from "../redux/cartReducer";
+import { removeItem,resetCart } from "../redux/cartReducer";
+import { Alert,Snackbar } from '@mui/material';
 
 const Container = styled.div``;
 
@@ -130,7 +131,7 @@ const Summary = styled.div`
   border: 0.5px solid lightgray;
   border-radius: 10px;
   padding: 20px;
-  height: 50vh;
+  height: 30vh;
 `;
 
 const SummaryTitle = styled.h1`
@@ -155,6 +156,7 @@ const Button = styled.button`
   background-color: black;
   color: white;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const CartEmpty = styled.div`
@@ -175,8 +177,10 @@ const Cart = () => {
 
   const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState(0);
+  const [cartSumbit,setCartSumbit] = useState(false);
   const products = useSelector(state => state.cart.products)
   const dispatch = useDispatch();
+  const poisition = { vertical: 'top', horizontal: 'center' }
   const goToProducts = () => { navigate('/products') };
   console.log('products',products);
   useEffect(() => {
@@ -187,6 +191,21 @@ const Cart = () => {
       setTotalPrice(0);
     }
   }, [products]);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setCartSumbit(false);
+  };
+
+  const checkoutCart = () => {
+    setCartSumbit(true);
+    dispatch(resetCart());
+    setTimeout(() => navigate('/'),1000);
+    
+  };
+
   // const getTotal = () => {
   // };
 
@@ -221,7 +240,7 @@ const Cart = () => {
               <TopText>Shopping Bag({ products.length })</TopText>
               {/* <TopText>Your Wishlist (0)</TopText> */}
             </TopTexts>
-            <TopButton type="filled">CHECKOUT NOW</TopButton>
+            <TopButton type="filled" onClick={checkoutCart}>CHECKOUT NOW</TopButton>
           </Top>
         }
         {
@@ -282,7 +301,7 @@ const Cart = () => {
                   <SummaryItemText>Total</SummaryItemText>
                   <SummaryItemPrice>$ {totalPrice.toFixed(2)}</SummaryItemPrice>
                 </SummaryItem>
-                <Button>CHECKOUT NOW</Button>
+                <Button onClick={checkoutCart}>CHECKOUT NOW</Button>
               </Summary>
             </Bottom>
            
@@ -293,6 +312,9 @@ const Cart = () => {
           </CartEmpty>
           
         }
+        <Snackbar anchorOrigin={poisition} open={cartSumbit} autoHideDuration={4000} onClose={handleCloseSnackbar} >
+              <Alert onClose={handleCloseSnackbar} severity='success'>Order Placed Thanks For Shopping</Alert>
+        </Snackbar>
       </Wrapper>
       <Footer />
     </Container>

@@ -25,6 +25,7 @@
 
 
 import axios from "axios";
+import loader from "../Components/loader/loader";
 
 console.log('hello',process.env.REACT_APP_BASEURL)
 const axiosHttp = axios.create({
@@ -33,6 +34,7 @@ const axiosHttp = axios.create({
 
 axiosHttp.interceptors.request.use(
   (config) => {
+    document.body.classList.add('loading-indicator');
     const token = null
     return {
       ...config,
@@ -49,6 +51,8 @@ axiosHttp.interceptors.request.use(
 
 axiosHttp.interceptors.response.use(
   (response) => {
+    document.body.classList.remove('loading-indicator');
+
     //const url = response.config.url;
 
     //setLocalStorageToken(token);

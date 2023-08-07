@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { mobile, tablet } from "../responsive";
 import { signupValidationSchema } from '../validators/signinschema';
 import { Alert,Snackbar } from '@mui/material';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp,selectIsLoggedIn } from "../redux/authReducer";
@@ -70,18 +70,19 @@ const Login = () => {
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+  const [showMessage, setshowMessage] = useState(false);
+  const [ errorMessage, setMessage  ] = useState('');
   const dispatch = useDispatch();
   const users = useSelector(state => state.auth.user);
   const navigate = useNavigate();
 
   const handleCloseSnackbar = (event, reason) => {
-    console.log('event',event);
-    console.log('reason',reason);
     if (reason === 'clickaway') {
       return;
     }
     setShowSnackbar(false);
     setFormSubmit(false);
+    setshowMessage(false);
   };
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -94,17 +95,24 @@ const Login = () => {
     }
     const isValid = await signupValidationSchema.isValid(formData);
     if(isValid){
-        //  console.log('form valid',formData);
-        //  console.log('form useSelector',users);
-         dispatch(signUp(formData));
-         setFormSubmit(isLoggedIn);
-        //  const loginState = { isLoggedIn:  isLoggedIn}
-         navigate('/');
+        dispatch(signUp(formData));
+        setFormSubmit(isLoggedIn);
+        if(isLoggedIn){
+          setMessage('Successfully login');
+          setTimeout(() => {
+            navigate('/');
+        }, 1000);
+        }else{
+          setshowMessage(true);
+          setMessage('Invalid user name & password')
+        }
     }else{
          console.log('form not valid')
          setShowSnackbar(true)
      }
   }
+
+  useEffect(() => console.log('total',users),users)
 
 
 
@@ -126,10 +134,11 @@ const Login = () => {
                  <p> Password must 4 characters max 16 characters is required </p>
               </Alert>
             </Snackbar>
-            <Snackbar open={formSubmit} autoHideDuration={1000} onClose={handleCloseSnackbar}>
-              <Alert onClose={handleCloseSnackbar} severity="success">
-                successfully login
-              </Alert>
+            <Snackbar open={formSubmit} autoHideDuration={4000} onClose={handleCloseSnackbar}>
+               <Alert onClose={handleCloseSnackbar} severity='success'> { errorMessage } </Alert>
+            </Snackbar>
+            <Snackbar open={showMessage} autoHideDuration={4000} onClose={handleCloseSnackbar}>
+               <Alert onClose={handleCloseSnackbar} severity='error'> { errorMessage } </Alert>
             </Snackbar>
       </Wrapper>
     </Container>

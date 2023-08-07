@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { resetCart } from "./cartReducer";
 
 export const authSlice = createSlice({
     name:'auth',
@@ -20,6 +22,7 @@ export const authSlice = createSlice({
             }else{
                 state.isLoggedIn = false;
             }
+            console.log('state.isLoggedIn',state.isLoggedIn);
         },
         signOut:(state,action) => {
             state.isLoggedIn = false;
@@ -28,10 +31,14 @@ export const authSlice = createSlice({
             const emailExists = state.user.some((user) => user.email === action.payload);
             state.error = emailExists ? 'Email already exists' : null;
         },
+        removeAllUsers:(state) => {
+            state.user = [];
+            console.log('check',state.user )
+        },
     },
 });
 
-export const { signIn, signUp, signOut,checkEmailExists } = authSlice.actions;
+export const { signIn, signUp, signOut,checkEmailExists,removeAllUsers } = authSlice.actions;
 
 export default authSlice.reducer;
 

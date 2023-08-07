@@ -114,8 +114,8 @@ export default function Navbar() {
   const goToCart = () => { navigate('/cart') }
 
   const goToSignUp = () => {
-    // dispatch(resetCart)
-    dispatch(signOut);
+    dispatch(resetCart())
+    dispatch(signOut());
     navigate('/signin');
   };
 
